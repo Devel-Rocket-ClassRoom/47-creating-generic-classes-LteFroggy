@@ -23,7 +23,8 @@ class SimpleQueue<T> {
             Console.WriteLine($"큐가 가득 찼습니다.");
             return;
         }
-        _items[(_back++) % _capacity] = item;
+        _items[_back++] = item;
+        _back %= _capacity;
         _size++;
     }
 
@@ -33,7 +34,11 @@ class SimpleQueue<T> {
             return default(T);
         }
         _size--;
-        return _items[(_front++) % _capacity];
+        
+        // 이전 바퀴 _front가 증가된 후 %= 연산을 수행하지 못했으므로, 이번 바퀴에 수행
+        _front %= _capacity;
+
+        return _items[_front++];
     }
 
     public T Peek() {
@@ -42,6 +47,7 @@ class SimpleQueue<T> {
             return default(T);
         }
 
-        return _items[(_back - 1) % _capacity];
+        _front %= _capacity;
+        return _items[_front];
     }
 }
